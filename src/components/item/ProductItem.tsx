@@ -14,7 +14,7 @@ const ProductItem: React.FC<Props> = ({ item, handleAddToCart }) => {
         <p>{item.description.length < 120 ? `${item.description}` : `${item.description.substring(0, 117)}...`}</p>
         <h3>${item.price}</h3>
       </div>
-      <button onClick={() => handleAddToCart(item)}>Add to cart</button>
+      <Button onClick={() => handleAddToCart(item)}>Add to cart</Button>
     </div>
   );
 };
