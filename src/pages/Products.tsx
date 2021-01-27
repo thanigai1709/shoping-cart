@@ -15,9 +15,32 @@ const Products = () => {
   const { data, isLoading, error } = useQuery<CartItemType[]>("products", fetchProducts);
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([] as CartItemType[]);
-  const getTotalItems = (items: CartItemType[]) => items.reduce((ack: number, item) => ack + item.amount, 0);
-  const handleAddToCart = () => null;
-  const handleRemoleFromCart = () => null;
+  const getTotalItems = (items: CartItemType[]) => items.reduce((ack: number, item) => ack + item.quantity, 0);
+  const handleAddToCart = (addedItem: CartItemType) => {
+    setCartItems((prev) => {
+      // 1. Is the item already added in the cart?
+      const isItemInCart = prev.find((item) => item.id === addedItem.id);
+      if (isItemInCart) {
+        return prev.map((item) => (item.id === addedItem.id ? { ...item, quantity: item.quantity + 1 } : item));
+      }
+      // First time the item is added
+      return [...prev, { ...addedItem, quantity: 1 }];
+    });
+  };
+  const handleRemoleFromCart = (id: number) => {
+    setCartItems((prev) =>
+      prev.reduce((ack, item) => {
+        console.log("ack", ack);
+        console.log("item", item);
+        if (item.id === id) {
+          if (item.quantity === 1) return ack;
+          return [...ack, { ...item, quantity: item.quantity - 1 }];
+        } else {
+          return [...ack, item];
+        }
+      }, [] as CartItemType[])
+    );
+  };
   if (isLoading) return <LinearProgress />;
   if (error) return <div>Something went wrong...</div>;
   return (
@@ -27,7 +50,7 @@ const Products = () => {
       </Drawer>
       <div className="navbar">
         <Button onClick={() => setCartOpen(true)}>
-          <Badge badgeContent={getTotalItems(cartItems)}>
+          <Badge badgeContent={getTotalItems(cartItems)} color="error">
             <AddShoppingCart />
           </Badge>
         </Button>

@@ -1,3 +1,4 @@
+import { Button } from "@material-ui/core";
 import { CartItemType } from "../../types";
 
 type Props = {
@@ -9,7 +10,23 @@ type Props = {
 const CartItem: React.FC<Props> = ({ item, addToCart, removeFromCart }) => {
   return (
     <div className="cart-item">
-      <h3>{item}</h3>
+      <div>
+        <h3>{item.title}</h3>
+        <div className="info">
+          <p>Price:${item.price}</p>
+          <p>Total:${(item.quantity * item.price).toFixed(2)}</p>
+        </div>
+        <div className="quantity">
+          <Button size="small" disableElevation variant="contained" onClick={() => removeFromCart(item.id)}>
+            -
+          </Button>
+          <p>{item.quantity}</p>
+          <Button size="small" disableElevation variant="contained" onClick={() => addToCart(item)}>
+            +
+          </Button>
+        </div>
+      </div>
+      <img src={item.image} alt={item.title} />
     </div>
   );
 };
