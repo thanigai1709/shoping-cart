@@ -1,5 +1,3 @@
-import { useState } from "react";
-// types
 import { CartItemType } from "../types";
 import CartItem from "./item/CartItem";
 
